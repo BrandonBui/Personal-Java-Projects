@@ -1,0 +1,1 @@
+This program is designed to take in a specifically formatted txt file which contains grade data for a specific course.  In this case it is courseData.txt which is also in this folder.  It will read the txt file and produce a report given the data in the txt file.
