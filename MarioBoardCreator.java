@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class HW_Methods {
+public class MarioBoardCreator {
 	/*
 	 * Declares two instance variables, mario and coin.
 	 * Instance variable used as these variables will be called
