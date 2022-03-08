@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class HW_Arrays {
+public class SkydiverVelocityCalculator {
 	
 	/*
 	 * main
