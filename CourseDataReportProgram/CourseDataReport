@@ -1,0 +1,166 @@
+/*
+ * HW_Loops_Files
+ * Author: Brandon Bui
+ * 
+ * This program is designed to take a specifically formatted txt file that
+ * contains grade data for different courses.  The file can contain as many
+ * courses and students per course as long as they are formatted the same
+ * way.
+ * 
+ * The program assumes that the txt file is formatted in the proper way, with
+ * the 3 grade weights in the first line, followed by the course number in the
+ * next, followed by the student ID number and their grades in the following 
+ * line.  Each course ends with a 0 to let the program know to switch courses.
+ */
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class CourseDataReport {
+	
+	//Main method.  Does most of the calculations and the file input.
+	public static void main(String args []) {
+		
+		//Declares scanner named inputStream and initializes as null.
+		Scanner inputStream  = null;
+		
+		//Uses a try catch to input the courseData file.
+		//If a FileNotFoundException is thrown then then a message informs the
+		//user and program terminates.
+		try {
+			inputStream = new Scanner(new FileInputStream("courseData.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.println("The file courseData.txt could not be found");
+			System.exit(0);
+		}
+		
+		//Declares needed variables. Uses an input stream to get data from the
+		//file.
+		double progWeight = inputStream.nextDouble();
+		double midWeight = inputStream.nextDouble();
+		double finalWeight = inputStream.nextDouble();
+		
+		int progGrade;
+		int midGrade;
+		int finalGrade;
+		double weightAvg;
+		double classAvg = 0;
+		int studentCount = 0;
+		
+		//Uses a while loop to check if there  is another course to check data
+		//for. Does this by checking is there is a next line and if that next
+		//line has an integer.
+		while (inputStream.hasNextLine() && inputStream.hasNextInt()) {
+			
+			//Calls the course header method using the next int from the file
+			//which is the class number.
+			courseHeader(inputStream.nextInt());
+			int studentID = inputStream.nextInt();
+			
+			//Assuming that there is at least one person in the course,
+			//the program obtains each piece of data per line and assigns it to
+			//it's respective variable.
+			do {
+				progGrade = inputStream.nextInt();
+				midGrade = inputStream.nextInt();
+				finalGrade = inputStream.nextInt();
+				//Calculates the weighted average using the variables obtained
+				//prior and multiplies by the weight defined at the beginning
+				//of the txt file.
+				weightAvg = (progGrade * progWeight) + (midGrade * midWeight) +
+						(finalGrade * finalWeight);
+				classAvg += weightAvg;
+				studentCount++;
+			
+				//Calls the statPrint method to print out the data for each
+				//student in the proper format.
+				statPrint(studentID, progGrade, midGrade, finalGrade, weightAvg);
+			
+				//Assigns the next integer in the file which should be the
+				//student ID or zero
+				studentID = inputStream.nextInt();
+			//If the studentID assigned in the previous line is 0 that means
+			//the program has reached the end of the text file and the do while
+			//loop ends.  
+			} while (studentID != 0);
+		
+			//calculates class average by dividing the total weighted average,
+			//which is stored in the class avg variable, by the total number of
+			//students in the class.
+			classAvg /= studentCount;
+			System.out.printf("Class Average: %.2f \n\n", classAvg);
+		
+		}
+		//Test method to I had used to check some variables.
+		//testDoubleValues(progWeight, midWeight, finalWeight);
+	}
+	
+	/*
+	 * courseHeader
+	 * 
+	 * This method takes the course number as a parameter and prints out a
+	 * header for the course.
+	 * 
+	 * @param courseNumber The course number that the header is being printed
+	 * for.
+	 */
+	public static void courseHeader(int courseNumber) {
+		System.out.println("Grade Data For Class " + courseNumber + "\n");
+		System.out.println(" ID   Programs  Midterm  Final  Weighted Average"
+				+ "  Programs Grade");
+		System.out.println(" --   --------  -------  -----  ----------------"
+				+ "  --------------");
+	}
+	
+	/*
+	 * statPrint
+	 * 
+	 * This method takes in the variables calculated in the previous and prints
+	 * them in the correct format.
+	 * 
+	 * @param id The student ID number.
+	 * @param prog The program grade.
+	 * @param mid The midterm grade.
+	 * @param fin The final grade.
+	 * @param weight The weighted average for the student.
+	 */
+	public static void statPrint(int id, int prog, int mid, int fin, double
+			weight) {
+		
+		//Prints out the data in the correct format.
+		System.out.print(id + "     " + prog + "       " + mid + "      " + fin
+				+ "         ");
+		System.out.printf("%.2f        ", weight);
+		
+		//Checks to see if the program grade is greater than 70 which
+		//determines pass or fail.  If the grade is greater than 70
+		//Pass is printed, if it is less than Fail is printed.
+		if (prog >= 70) {
+			System.out.print("Pass \n");
+		} else {
+			System.out.print("Fail \n");
+		}
+
+	}
+	
+	/*
+	 * The following two methods are just testing methods that were used to
+	 * check is variables were getting the correct assignment.
+	 * 
+	 * They both use ...arg to accept an unlimited amount of variables.  One
+	 * is for doubles and the other is for int.
+	 */
+	public static void testDoubleValues(double...arg) {
+		for (double element : arg) {
+			System.out.println(element);
+		}
+	}
+	
+	public static void testIntValues(int...arg) {
+		for (int element : arg) {
+			System.out.println(element);
+		}
+	}
+
+}
